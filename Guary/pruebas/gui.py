@@ -1,55 +1,95 @@
-import tkinter as tk
+from tkinter import *
+from tkinter.ttk import *
+
+obras = ("Colón 8 viviendas", "Obra 15", "Obra 23")
 
 # Crear ventana principal
-root = tk.Tk()
-root.title("Factura")
+window = Tk()
+window.title("Factura")
+window.geometry("900x600")
 
-frame = tk.Frame(root, width=100, height=100, bg="gray")
-frame.grid(row=0, column=0)
+# combo = Combobox(window, state="readonly")
 
-# Cambiar esto, no se si convendrá hacerlo en función porque hay que acceder a la variable para ver que se escribió.
-# O hacerlo en función pero pasando la variable como parámetro, pinta.
+# combo["values"] = obras
+# combo.current(1)
 
+# .grid(column=3, row=0)
 
-def etiqueta_y_entrada(texto, rc_label, rc_grid):
-    tk.Label(root, text=texto).grid(row=rc_label[0], column=rc_label[1])
-    invoice_num = tk.Entry(root)
-    invoice_num.grid(row=rc_grid[0], column=rc_grid[1])
-
-
-# fecha, factura_tipo, factura_nro, proveedor, unidad, concepto, cantidad, precio_u, obra
-# Crear etiquetas y entradas de datos
-etiqueta_y_entrada("Nro de factura:", [0, 0], [0, 1])
-etiqueta_y_entrada("Fecha de emisión", [0, 2], [0, 3])
-# etiqueta_y_entrada("Tipo ")
-
-tk.Label(root, text="Cliente:").grid(row=2, column=0)
-client_name = tk.Entry(root)
-client_name.grid(row=2, column=1,)
-
-tk.Label(root, text="Concepto:").grid(row=3, column=0)
-concept = tk.Entry(root)
-concept.grid(row=3, column=1)
-
-tk.Label(root, text="Monto:").grid(row=4, column=0)
-amount = tk.Entry(root)
-amount.grid(row=4, column=1)
-
-# Función para imprimir los datos ingresados en la consola
+# frame = Frame(window, width=100, height=100, bg="gray")
+# frame.grid(row=0, column=0)
 
 
-def print_invoice_data():
-    print("Número de factura:", invoice_num.get())
-    print("Fecha de emisión:", invoice_date.get())
-    print("Cliente:", client_name.get())
-    print("Concepto:", concept.get())
-    print("Monto:", amount.get())
+# Create function that validates dates:
+def validate_date(new_text):
+    """
+    Check that `new_text` is in dd/mm/aaaa format.
+    """
+    # top 10 characters
+    if len(new_text) > 10:
+        return False
+    checks = []
+    for i, char in enumerate(new_text):
+        # In index 2 and 5 must be "/".
+        if i in (2, 5):
+            checks.append(char == "/")
+        else:
+            # Otherwise chars must be numbers between 0 and 9
+            checks.append(char.isdecimal())
+    # `all()` returns true if all are true
+    return all(checks)
+
+
+date = Label(window, text="Fecha:")
+date.grid(column=0, row=2)
+date_value = Entry(
+    validate="key",
+    # We only need "%P".
+    validatecommand=(window.register(validate_date), "%P"),
+)
+date_value.grid(column=1, row=2)
+
+bill = Label(window, text="Nro de factura:")
+bill.grid(column=4, row=2)
+bill_value = Entry(window)
+bill_value.grid(column=5, row=2)
+
+type = Label(window, text="Tipo de factura:")
+type.grid(column=9, row=2)
+type_value = Combobox(window, state="readonly")
+type_value["values"] = ("A", "B", "C")
+type_value.current(0)
+type_value.grid(column=10, row=2)
+
+supplier = Label(window, text="Proveedor:")
+supplier.grid(column=14, row=2)
+supplier_value = Combobox(window, state="readonly")
+supplier_value["values"] = ("Hierro San José", "Proveedor 1", "Proveedor 2")
+# supplier_value.current(0)
+supplier_value.grid(column=15, row=2)
+
+# unidad, concepto, cantidad, precio_u, obra
+
+unit = Label(window, text="Unidad:", padding=10)
+unit.grid(column=0, row=4)
+unit_value = Entry(window)
+unit_value.grid(column=1, row=4)
+
+concept = Label(window, text="Concepto:", padding=10)
+concept.grid(column=4, row=4)
+concept_value = Entry(window)
+concept_value.grid(column=5, row=4)
+
+# def print_invoice_data():
+#    print("Número de factura:" + bill_value.get())
+# print("Fecha de emisión:", invoice_date.get())
+# print("Cliente:", client_name.get())
+# print("Concepto:", concept.get())
+# print("Monto:", amount.get())
 
 
 # Botón para imprimir los datos ingresados
-submit_button = tk.Button(root, text="Imprimir factura",
-                          command=print_invoice_data)
-submit_button.grid(row=5, column=1)
+# submit_button = Button(window, text="Imprimir factura", command=print_invoice_data)
+# submit_button.grid(row=5, column=1)
 
 # Ejecutar ventana principal
-root.mainloop()
+window.mainloop()
