@@ -39,33 +39,34 @@ def validate_date(new_text):
     return all(checks)
 
 
-date = Label(window, text="Fecha:")
-date.grid(column=0, row=2)
+date = Label(window, text="Fecha:", width=6)
+date.grid(column=0, row=2, sticky=E)
 date_value = Entry(
     validate="key",
     # We only need "%P".
     validatecommand=(window.register(validate_date), "%P"),
+    width=10,
 )
-date_value.grid(column=1, row=2)
+date_value.grid(column=1, row=2, sticky=W)
 
-bill = Label(window, text="Nro de factura:")
-bill.grid(column=4, row=2)
+bill = Label(window, text="Nro de factura:", width=15)
+bill.grid(column=4, row=2, sticky=W)
 bill_value = Entry(window)
-bill_value.grid(column=5, row=2)
+bill_value.grid(column=5, row=2, sticky=W)
 
 type = Label(window, text="Tipo de factura:")
-type.grid(column=9, row=2)
+type.grid(column=8, row=2)
 type_value = Combobox(window, state="readonly")
 type_value["values"] = ("A", "B", "C")
 type_value.current(0)
-type_value.grid(column=10, row=2)
+type_value.grid(column=9, row=2)
 
 supplier = Label(window, text="Proveedor:")
-supplier.grid(column=14, row=2)
+supplier.grid(column=12, row=2)
 supplier_value = Combobox(window, state="readonly")
 supplier_value["values"] = ("Hierro San José", "Proveedor 1", "Proveedor 2")
 # supplier_value.current(0)
-supplier_value.grid(column=15, row=2)
+supplier_value.grid(column=13, row=2)
 
 # unidad, concepto, cantidad, precio_u, obra
 
@@ -78,6 +79,16 @@ concept = Label(window, text="Concepto:", padding=10)
 concept.grid(column=4, row=4)
 concept_value = Entry(window)
 concept_value.grid(column=5, row=4)
+
+quantity = Label(window, text="Cantidad:", padding=10)
+quantity.grid(column=8, row=4)
+quantity_value = Entry(window)
+quantity_value.grid(column=9, row=4)
+
+price = Label(window, text="Precio:", padding=10, width=6)
+price.grid(column=12, row=4, sticky=W)
+price_value = Entry(window, width=5)
+price_value.grid(column=13, row=4, sticky=W)
 
 # def print_invoice_data():
 #    print("Número de factura:" + bill_value.get())
