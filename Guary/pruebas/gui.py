@@ -3,6 +3,9 @@ from tkinter.ttk import *
 
 obras = ("Colón 8 viviendas", "Obra 15", "Obra 23")
 
+altura = 0.35
+headlines = False
+
 # Crear ventana principal
 window = Tk()
 window.title("Factura")
@@ -40,67 +43,104 @@ def validate_date(new_text):
 
 
 date = Label(window, text="Fecha:", width=6)
-date.grid(column=0, row=2, sticky=E)
-date_value = Entry(
+date.place(relx=0.05, rely=0)
+fecha_emision = Entry(
     validate="key",
     # We only need "%P".
     validatecommand=(window.register(validate_date), "%P"),
     width=10,
 )
-date_value.grid(column=1, row=2, sticky=W)
+fecha_emision.place(relx=0.1, rely=0)
 
 bill = Label(window, text="Nro de factura:", width=15)
-bill.grid(column=4, row=2, sticky=W)
-bill_value = Entry(window)
-bill_value.grid(column=5, row=2, sticky=W)
+bill.place(relx=0.2, rely=0)
+nro_factura = Entry(window)
+nro_factura.place(relx=0.3, rely=0)
 
 type = Label(window, text="Tipo de factura:")
-type.grid(column=8, row=2)
-type_value = Combobox(window, state="readonly")
-type_value["values"] = ("A", "B", "C")
-type_value.current(0)
-type_value.grid(column=9, row=2)
+type.place(relx=0.45, rely=0)
+tipo_factura = Combobox(window, state="readonly", width=3)
+tipo_factura["values"] = ("A", "B", "C")
+tipo_factura.current(0)
+tipo_factura.place(relx=0.55, rely=0)
 
 supplier = Label(window, text="Proveedor:")
-supplier.grid(column=12, row=2)
-supplier_value = Combobox(window, state="readonly")
-supplier_value["values"] = ("Hierro San José", "Proveedor 1", "Proveedor 2")
+supplier.place(relx=0.60, rely=0)
+proveedor = Combobox(window, state="readonly")
+proveedor["values"] = ("Hierro San José", "Proveedor 1", "Proveedor 2")
 # supplier_value.current(0)
-supplier_value.grid(column=13, row=2)
+proveedor.place(relx=0.67, rely=0)
 
 # unidad, concepto, cantidad, precio_u, obra
 
-unit = Label(window, text="Unidad:", padding=10)
-unit.grid(column=0, row=4)
-unit_value = Entry(window)
-unit_value.grid(column=1, row=4)
+unit = Label(window, text="Unidad:")
+unit.place(relx=0.05, rely=0.05)
+unidad = Entry(window, width=10)
+unidad.place(relx=0.1, rely=0.05)
 
-concept = Label(window, text="Concepto:", padding=10)
-concept.grid(column=4, row=4)
-concept_value = Entry(window)
-concept_value.grid(column=5, row=4)
+concept = Label(window, text="Concepto:")
+concept.place(relx=0.2, rely=0.05)
+concepto = Entry(window, width=23)
+concepto.place(relx=0.28, rely=0.05)
 
-quantity = Label(window, text="Cantidad:", padding=10)
-quantity.grid(column=8, row=4)
-quantity_value = Entry(window)
-quantity_value.grid(column=9, row=4)
+quantity = Label(window, text="Cantidad:")
+quantity.place(relx=0.45, rely=0.05)
+cantidad = Entry(window, width=10)
+cantidad.place(relx=0.52, rely=0.05)
 
-price = Label(window, text="Precio:", padding=10, width=6)
-price.grid(column=12, row=4, sticky=W)
-price_value = Entry(window, width=5)
-price_value.grid(column=13, row=4, sticky=W)
+price = Label(window, text="Precio:", width=6)
+price.place(relx=0.6, rely=0.05)
+precio_u = Entry(window, width=10)
+precio_u.place(relx=0.67, rely=0.05)
 
-# def print_invoice_data():
-#    print("Número de factura:" + bill_value.get())
-# print("Fecha de emisión:", invoice_date.get())
-# print("Cliente:", client_name.get())
-# print("Concepto:", concept.get())
-# print("Monto:", amount.get())
+
+def imprimir_datos():
+    print("Número de factura: " + nro_factura.get())
+    print("Fecha de emisión: ", fecha_emision.get())
+    print("Proveedor: ", proveedor.get())
+    print("Concepto: ", concepto.get())
+    print("Cantidad: ", cantidad.get())
+    print("Precio por unidad: ", precio_u.get())
+    print("Total: ", int(cantidad.get()) * float(precio_u.get()))
+
+
+def agregar_linea():
+    if not globals()["headlines"]:
+        date0 = Label(window, text="Fecha", width=6)
+        date0.place(relx=0.05, rely=0.3)
+        concept0 = Label(window, text="Concepto", width=9)
+        concept0.place(relx=0.12, rely=0.3)
+        quantity0 = Label(window, text="Cantidad", width=9)
+        quantity0.place(relx=0.4, rely=0.3)
+        unit0 = Label(window, text="Unidad", width=7)
+        unit0.place(relx=0.46, rely=0.3)
+        precio_u0 = Label(window, text="Precio U.")
+        precio_u0.place(relx=0.52, rely=0.3)
+        total0 = Label(window, text="Total")
+        total0.place(relx=0.6, rely=0.3)
+        globals()["headlines"] = True
+    date1 = Label(window, text=fecha_emision.get())
+    date1.place(relx=0.05, rely=globals()["altura"])
+    concept0 = Label(window, text=concepto.get())
+    concept0.place(relx=0.12, rely=globals()["altura"])
+    quantity0 = Label(window, text=cantidad.get())
+    quantity0.place(relx=0.4, rely=globals()["altura"])
+    unit0 = Label(window, text=unidad.get())
+    unit0.place(relx=0.46, rely=globals()["altura"])
+    precio_u0 = Label(window, text=precio_u.get())
+    precio_u0.place(relx=0.52, rely=globals()["altura"])
+    total0 = Label(window, text=int(cantidad.get()) * float(precio_u.get()))
+    total0.place(relx=0.6, rely=globals()["altura"])
+    globals()["altura"] = globals()["altura"] + 0.05
 
 
 # Botón para imprimir los datos ingresados
-# submit_button = Button(window, text="Imprimir factura", command=print_invoice_data)
-# submit_button.grid(row=5, column=1)
+submit_button = Button(window, text="Imprimir factura", command=imprimir_datos)
+submit_button.place(relx=0.05, rely=0.1)
+
+# Botón para agregar línea de factura
+add_button = Button(window, text="Agregar línea", command=agregar_linea)
+add_button.place(relx=0.2, rely=0.1)
 
 # Ejecutar ventana principal
 window.mainloop()
